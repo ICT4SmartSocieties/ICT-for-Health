@@ -69,8 +69,8 @@ def lab1ex1 ():
     n_samples = 1000    
     bilirubin_sick = ContinuousEnsemble("Dy", pd.Series(np.random.normal(15,8,n_samples)))
     bilirubin_healty = ContinuousEnsemble("Dn", pd.Series(np.random.normal(10,4,n_samples)))
-    #Dy.plot()
-    #Dn.plot()
+    #bilirubin_sick.plot()
+    #bilirubin_healty.plot()
 
     sensitivity = np.array([1.0 - bilirubin_sick.cdf(float(th)) for th in np.nditer(TH)]).reshape(len(TH),1)
     specificity = np.array([bilirubin_healty.cdf(float(th)) for th in np.nditer(TH)]).reshape(len(TH),1)
