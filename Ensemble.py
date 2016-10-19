@@ -62,7 +62,46 @@ class ContinuousEnsemble (object):
     def show (self):
         print "Ensamble name: " + str(self.name)
 
-def lab1ex1 ():
+def plot_SLR (df, x_col, y_col):
+
+    fig, (ax1,ax2) = plt.subplots(1,2, figsize = (18,6))
+    x = df[x_col].astype("float64").reshape(-1,1)
+    y = df[y_col].astype("float64").reshape(-1,1)
+    print x.shape
+    print y.shape
+    
+    lr = linear_model.LinearRegression()
+    model = lr.fit(x,y)
+    plt.style.use('ggplot')
+    ax1.scatter(x, y,  color='black')
+    ax1.plot(x, model.predict(x), color='blue',linewidth=3)
+    ax1.set_xlabel("x")
+    ax1.set_ylabel("y")
+    ax1.set_title("OLSLR by sklearn")
+    
+    x = sm.add_constant(x)
+    results = sm.OLS(y, x).fit()
+    print results.summary()
+    sm.graphics.plot_fit(results, 1, ax=ax2)
+    ax2.set_xlabel("x")
+    ax2.set_ylabel("y")
+    ax2.set_title("OLSLR by statsmodels")
+    plt.show()
+
+def plot_LR_performances (yhat_train, y_train, yhat_test, y_test):
+
+    fig1, ((ax1,ax2),(ax3,ax4)) = plt.subplots(2,2, figsize = (14,6))
+    ax1.plot(yhat_train, label="Data")
+    ax1.plot(y_train, label="Data")
+    sns.distplot(yhat_train-y_train, label="Data", ax=ax2)
+    
+    ax3.plot(yhat_test, label="Data")
+    ax3.plot(y_test, label="Data")
+    sns.distplot(yhat_test-y_test, label="Data", ax=ax4)
+    #plt.show()
+        
+        
+def lab0ex1 ():
         
     TH = np.arange(1,20,0.1)
 
@@ -134,7 +173,7 @@ def lab1ex1 ():
     
     plt.show()
 
-def lab1ex2 ():
+def lab0ex2 ():
 
     #zF[int(j)][int(i)] = (np.exp(-1.0/l)-np.exp(-x/l)) / (np.exp(-1/l)-np.exp(-20.0/l))
 #    fig = plt.figure(figsize = (18,6))
@@ -213,7 +252,7 @@ def lab1ex2 ():
     
     plt.show()
 
-def lab2ex1 ():
+def lab1 ():
 
     df = pd.read_csv("parkinsons_updrs.csv")
     	
@@ -248,48 +287,9 @@ def lab2ex1 ():
             training_data[col] = (train_df[col].values-train_df[col].mean())/train_df[col].std()
             testing_data[col] = (test_df[col].values-test_df[col].mean())/test_df[col].std()    
             #print training_data[col].mean(), training_data[col].var()
+            
     training_data.to_csv("training_norm_data.csv")
     testing_data.to_csv("testing_norm_data.csv")
-    
-        
-    def plot_SLR_sm (df, x_col, y_col):
-    
-        fig, (ax1,ax2) = plt.subplots(1,2, figsize = (18,6))
-        x = df[x_col].astype("float64").reshape(-1,1)
-        y = df[y_col].astype("float64").reshape(-1,1)
-        print x.shape
-        print y.shape
-        
-        lr = linear_model.LinearRegression()
-        model = lr.fit(x,y)
-        plt.style.use('ggplot')
-        ax1.scatter(x, y,  color='black')
-        ax1.plot(x, model.predict(x), color='blue',linewidth=3)
-        ax1.set_xlabel("x")
-        ax1.set_ylabel("y")
-        ax1.set_title("OLSLR by sklearn")
-        
-        x = sm.add_constant(x)
-        results = sm.OLS(y, x).fit()
-        print results.summary()
-        sm.graphics.plot_fit(results, 1, ax=ax2)
-        ax2.set_xlabel("x")
-        ax2.set_ylabel("y")
-        ax2.set_title("OLSLR by statsmodels")
-        plt.show()
-
-    def plot_LR_performances (yhat_train, y_train, yhat_test, y_test):
-
-        fig, (ax1,ax2) = plt.subplots(1,2, figsize = (18,6))
-        ax1.plot(yhat_train, label="Data")
-        ax1.plot(y_train, label="Data")
-        sns.distplot(yhat_train-y_train, label="Data", ax=ax2)
-        
-        fig, (ax1,ax2) = plt.subplots(1,2, figsize = (18,6))
-        ax1.plot(yhat_test, label="Data")
-        ax1.plot(y_test, label="Data")
-        sns.distplot(yhat_test-y_test, label="Data", ax=ax2)
-        #plt.show()
     
     #x_col = "Shimmer"
     y_col = "Jitter(%)"
@@ -325,7 +325,7 @@ def lab2ex1 ():
     # Gradient descent LR (web version)
     learning_coefficient = 0.2
     weights = np.array([train_df[col].mean() for col in train_df if col not in \
-    					["day","age","sex","subject","test_time","total_UPDRS"]])
+    					["day","age","sex","subject","test_time",y_col]])
     for i in range(0, 100000):
         yhat = X.dot(weights)
         loss = yhat - y
@@ -342,7 +342,7 @@ def lab2ex1 ():
     # Gradient descent LR (slides version)
     learning_coefficient = 0.00001
     weights = np.array([train_df[col].mean() for col in train_df if col not in \
-    					["day","age","sex","subject","test_time","total_UPDRS"]])
+    					["day","age","sex","subject","test_time",y_col]])
     for i in range(0, 100000):
         yhat = X.dot(weights)
         loss = yhat - y
@@ -358,7 +358,7 @@ def lab2ex1 ():
 
     # Steepest descent LR (slides version)
     weights = np.array([train_df[col].mean() for col in train_df if col not in \
-    					["day","age","sex","subject","test_time","total_UPDRS"]])
+    					["day","age","sex","subject","test_time",y_col]])
     for i in range(0, 100000):
         yhat = X.dot(weights)
         loss = yhat - y
@@ -378,6 +378,72 @@ def lab2ex1 ():
 
     plt.show()
 
-#lab1ex1()
-#lab1ex2()
-lab2ex1()
+def lab2():
+    
+    df = pd.read_csv("parkinsons_updrs.csv")
+    	
+    # Time
+    time = df["test_time"]
+    for idx in time[time < 0].apply(np.abs).index:
+    	df.set_value(idx, "test_time", time[time < 0].apply(np.abs).loc[idx])
+    df["day"] = df["test_time"].astype("int64")
+    
+    # Pre-processing
+    new_df = pd.DataFrame(columns=df.columns)
+    i = 0
+    for subject, measurements in df.groupby(["subject"]):		
+    	for day, day_measurements in measurements.groupby("day"):
+    		new_df.set_value(i, "subject", subject)
+    		for col in day_measurements:
+    			if col not in ["subject"]:
+    				new_df.set_value(i, col, day_measurements[col].mean())					
+    		i += 1
+    
+    # Define training and testing
+    train_df = new_df[new_df.subject < 38]
+    train_df.to_csv("training_data.csv")
+    
+    test_df = new_df[new_df.subject >= 38]
+    test_df.to_csv("testing_data.csv")
+
+    training_data = pd.DataFrame()
+    testing_data = pd.DataFrame()
+    for col in train_df:
+        if col not in ["day","age","sex","subject","test_time"]:
+            training_data[col] = (train_df[col].values-train_df[col].mean())/train_df[col].std()
+            testing_data[col] = (test_df[col].values-test_df[col].mean())/test_df[col].std()    
+            print training_data[col].mean(), training_data[col].var()
+            print testing_data[col].mean(), testing_data[col].var()
+            
+    #x_col = "Shimmer"
+    y_col = "Jitter(%)"
+    #plot_SLR (testing_data, x_col, y_col)
+    
+    y_train = training_data[y_col].astype("float64").values
+    X_train = training_data[[col for col in training_data if col != y_col]] \
+                   .astype("float64").values
+
+    y_test = testing_data[y_col].astype("float64").values
+    X_test = testing_data[[col for col in training_data if col != y_col]] \
+                   .astype("float64").values
+
+    def PCR(X, y, N):
+
+        RX = 1.0/N * X.T.dot(X)
+        eigvals, U = np.linalg.eig(RX)
+        Lambda = np.diag(eigvals)
+        Z = X.dot(U)
+        Z_norm = 1.0/N * Z.dot(np.linalg.matrix_power(Lambda, -1/2))
+        zy = Z_norm.T.dot(y)
+        yhat = 1.0/N * Z_norm.dot(zy)        
+
+        return yhat
+
+    yhat_train = PCR(X_train, y_train, len(training_data))
+    yhat_test = PCR(X_test, y_test, len(testing_data))
+    plot_LR_performances(yhat_train, y_train, yhat_test, y_test)
+
+#lab0ex1()
+#lab0ex2()
+#lab1()
+lab2()
