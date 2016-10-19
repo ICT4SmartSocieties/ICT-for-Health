@@ -1,4 +1,5 @@
 import numpy as np
+
 import scipy as sp
 import pandas as pd
 import collections
@@ -324,19 +325,19 @@ def lab1 ():
     
     # Gradient descent LR (web version)
     learning_coefficient = 0.2
-    weights = np.array([train_df[col].mean() for col in train_df if col not in \
+    a = np.array([train_df[col].mean() for col in train_df if col not in \
     					["day","age","sex","subject","test_time",y_col]])
     for i in range(0, 100000):
         yhat = X.dot(weights)
         loss = yhat - y
         cost = np.sum(loss ** 2)
         gradient = X.T.dot(loss) / 2.0 / float(len(y))
-        weights -= learning_coefficient * gradient
+        a -= learning_coefficient * gradient
     print cost
-    print weights
+    print a
     y_train = y
-    yhat_test = X_test.dot(weights)
-    yhat_train = X.dot(weights)    
+    yhat_test = X_test.dot(a)
+    yhat_train = X.dot(a)    
     plot_LR_performances(yhat_train, y_train, yhat_test, y_test)
 
     # Gradient descent LR (slides version)
@@ -348,33 +349,33 @@ def lab1 ():
         loss = yhat - y
         cost = np.sum(loss ** 2)
         gradient = -2 * X.T.dot(y) + 2 * X.T.dot(X).dot(weights)
-        weights -= learning_coefficient * gradient
+        a -= learning_coefficient * gradient
     print cost
-    print weights
+    print a
     y_train = y
-    yhat_test = X_test.dot(weights)
-    yhat_train = X.dot(weights)    
+    yhat_test = X_test.dot(a)
+    yhat_train = X.dot(a)    
     plot_LR_performances(yhat_train, y_train, yhat_test, y_test)
 
     # Steepest descent LR (slides version)
-    weights = np.array([train_df[col].mean() for col in train_df if col not in \
+    a = np.array([train_df[col].mean() for col in train_df if col not in \
     					["day","age","sex","subject","test_time",y_col]])
     for i in range(0, 100000):
         yhat = X.dot(weights)
         loss = yhat - y
         cost = np.sum(loss ** 2)
-        gradient = -2 * X.T.dot(y) + 2 * X.T.dot(X).dot(weights)
+        gradient = -2 * X.T.dot(y) + 2 * X.T.dot(X).dot(a)
         H = 4 * X.T.dot(X)
-        weights -= np.dot((gradient.T.dot(gradient) / (gradient.T.dot(H).dot(gradient))),gradient)
+        a -= np.dot((gradient.T.dot(gradient) / (gradient.T.dot(H).dot(gradient))),gradient)
     print cost
-    print weights
+    print a
     y_train = y
-    yhat_test = X_test.dot(weights)
-    yhat_train = X.dot(weights)    
+    yhat_test = X_test.dot(a)
+    yhat_train = X.dot(a)    
     plot_LR_performances(yhat_train, y_train, yhat_test, y_test)
     
     fig,ax = plt.subplots()
-    ax.plot(range(0,len(weights)), weights, "o")
+    ax.plot(range(0, len(a)), a, "o")
 
     plt.show()
 
@@ -432,15 +433,18 @@ def lab2():
         RX = 1.0/N * X.T.dot(X)
         eigvals, U = np.linalg.eig(RX)
         Lambda = np.diag(eigvals)
+        
         Z = X.dot(U)
         Z_norm = 1.0/N * Z.dot(np.linalg.matrix_power(Lambda, -1/2))
-        zy = Z_norm.T.dot(y)
-        yhat = 1.0/N * Z_norm.dot(zy)        
+        
+        a = 1.0/N * U.dot(np.linalg.inv(Lambda).dot(U.T).dot(X.T).dot(y))
+        print a
+        
+        return a
 
-        return yhat
-
-    yhat_train = PCR(X_train, y_train, len(training_data))
-    yhat_test = PCR(X_test, y_test, len(testing_data))
+    a = PCR(X_train, y_train, len(training_data))
+    yhat_train = X_train.dot(a)
+    yhat_test =  X_test.dot(a)
     plot_LR_performances(yhat_train, y_train, yhat_test, y_test)
 
 #lab0ex1()
