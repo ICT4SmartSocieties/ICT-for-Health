@@ -1,6 +1,4 @@
-# Heading
-
-2DO list:
+# 2DO list:
 
 1. Add InputData directory
 2. Notebooks Labs 1,2
