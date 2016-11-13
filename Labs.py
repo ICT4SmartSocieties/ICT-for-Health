@@ -1,14 +1,17 @@
+import collections
+import itertools
+import csv
+
 import numpy as np
 
 import scipy as sp
 import pandas as pd
-import collections
-import itertools
 
 import statsmodels.api as sm
 from sklearn import linear_model    
 
 import matplotlib.pyplot as plt
+from mpl_toolkits.mplot3d import Axes3D
 import seaborn as sns
 
 class DiscreteEnsemble (object):
@@ -306,7 +309,20 @@ def lab1 ():
 
     print X.shape
     print y.shape
-        
+
+    def MLS_LR_smgg():
+        pass            
+    def MLS_LR_slides():
+        pass
+    def GD_LR_slides():
+        pass
+    def GD_LR_web():
+        pass
+    def STEEPD_LR_slides():
+        pass
+    def STOCHD_LR_slides():
+        pass
+    
     # OLSLR by statsmodels
     sm_ols = sm.OLS(y, X).fit()
     print(sm_ols.summary())
@@ -403,18 +419,20 @@ def lab2():
     # Define training and testing
     train_df = new_df[new_df.subject < 38]
     train_df.to_csv("training_data.csv")
+    print len(train_df)
     
     test_df = new_df[new_df.subject >= 38]
     test_df.to_csv("testing_data.csv")
-
+    print len(test_df)
+    
     training_data = pd.DataFrame()
     testing_data = pd.DataFrame()
     for col in train_df:
         if col not in ["day","age","sex","subject","test_time"]:
             training_data[col] = (train_df[col].values-train_df[col].mean())/train_df[col].std()
             testing_data[col] = (test_df[col].values-test_df[col].mean())/test_df[col].std()    
-            print training_data[col].mean(), training_data[col].var()
-            print testing_data[col].mean(), testing_data[col].var()
+            #print training_data[col].mean(), training_data[col].var()
+            #print testing_data[col].mean(), testing_data[col].var()
             
     #x_col = "Shimmer"
     y_col = "Jitter(%)"
@@ -425,29 +443,77 @@ def lab2():
                    .astype("float64").values
 
     y_test = testing_data[y_col].astype("float64").values
-    X_test = testing_data[[col for col in training_data if col != y_col]] \
+    X_test = testing_data[[col for col in testing_data if col != y_col]] \
                    .astype("float64").values
+
+    #print training_data.var()
 
     def PCR(X, y, N):
 
         RX = 1.0/N * X.T.dot(X)
+        print RX
         eigvals, U = np.linalg.eig(RX)
+        
+        for i in range(len(eigvals)):
+            print eigvals[i]
+                
         Lambda = np.diag(eigvals)
-        
-        Z = X.dot(U)
-        Z_norm = 1.0/N * Z.dot(np.linalg.matrix_power(Lambda, -1/2))
-        
-        a = 1.0/N * U.dot(np.linalg.inv(Lambda).dot(U.T).dot(X.T).dot(y))
-        print a
-        
+        a = 1.0/N * U.dot(np.linalg.inv(Lambda).dot(U.T).dot(X.T).dot(y))        
         return a
 
-    a = PCR(X_train, y_train, len(training_data))
+    a = PCR(X_train, y_train, len(training_data)-1)
     yhat_train = X_train.dot(a)
     yhat_test =  X_test.dot(a)
     plot_LR_performances(yhat_train, y_train, yhat_test, y_test)
+        
+def lab3 ():
+    
+    df = pd.DataFrame(list(csv.reader(open("arrhythmia.csv","rb"), delimiter=',')))
 
+    for col in df:
+        if "?" in df[col].unique():
+           df.drop(col, axis=1, inplace = True)
+           continue
+        df[col] = df[col].astype("float64")
+        if len(df[col].unique()) == 1:
+            u = df[col].unique()
+            if u[0] == 0:
+                df.drop(col, axis=1, inplace = True)
+                        
+    df = pd.DataFrame(data=df.values, \
+                      index=df.index, \
+                      columns=range(0,len(df.columns)))
+    
+        
+    last = len(df.columns) - 1
+    df[last].ix[(df[last] > 1)] = 2
+    
+    new_df = ((df-df.mean())/df.std()).drop(last, axis=1)
+    y = new_df.values
+
+    y1 = new_df.ix[(df[last] == 1)]
+    y2 = new_df.ix[(df[last] == 2)]
+    
+    x1 = y1.mean()
+    x2 = y2.mean()
+    
+    xmeans = np.stack([x1.values, x2.values])
+    print xmeans.shape
+    eny = np.diag(y.dot(y.T))
+    print eny.shape
+    enx = np.diag(xmeans.dot(xmeans.T))
+    print enx.shape
+    dotprod = y.dot(xmeans.T)
+    print dotprod.shape
+    U,V = np.meshgrid(enx, eny)
+    dist2 = U + V - 2*dotprod
+    print dist2.shape
+        
+    return y, dist2
+    
 #lab0ex1()
 #lab0ex2()
 #lab1()
-lab2()
+#lab2()
+
+y, distances = lab3()
