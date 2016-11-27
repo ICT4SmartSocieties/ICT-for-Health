@@ -1,0 +1,50 @@
+%use the bayes criterion to measerue pi1 (number of patient without arr)
+%and pi2 the number of patient with arrhytmia
+sorted_class_id = sortrows(class_id);
+number_of_health = sorted_class_id == 1;
+[N_patient, columns] = size(class_id);
+pi1 = sum(number_of_health)/N_patient;
+pi2 = (N_patient-sum(number_of_health))/N_patient;
+
+q1 = mean(y1);
+q2 = mean(y2);
+%apply the minimum distance criterion for each rows of y
+qmeans=[q1;q2];% matrix with x1 and x2
+eny=diag(y*y');% |y(n)|^2 
+enq=diag(qmeans*qmeans');% |x1|^2 and |x2|^2
+dotprod=y*xmeans';% matrix with the dot product between
+% each y(n) and each x
+[U,V]=meshgrid(enq,eny);
+dist2=U+V-2*dotprod;%|y(n)|^2+|x(k)|^2-2y(n)x(k)=
+%=|y(n)-x(k)|^2
+var_y = 1
+distEst2(:,1) = dist2(:,1) - (2*1*log(pi1));
+distEst2(:,2) = dist2(:,2) - (2*1*log(pi2));
+%Measure the T/F negative/positive
+[M,computed_class_id2] = min(distEst2,[],2);
+%1 health, 2seek
+true_negative2 =0;
+false_positive2=0;
+false_negative2=0;
+true_positive2=0;
+for i=1:R_arr
+   if class_id(i) == 1 && computed_class_id2(i) == 1
+       true_negative2=true_negative2+1;
+   elseif class_id(i) == 1 && computed_class_id2(i) == 2
+       false_positive2 = false_positive2 +1;
+   elseif class_id(i) == 2 && computed_class_id2(i) == 1
+       false_negative2 = false_negative2 + 1;
+   else
+       true_positive2 = true_positive2 + 1;
+   end      
+end
+
+total_seek2 = true_positive2 + false_negative2;
+total_health2 = true_negative2 + false_positive2;
+
+res2 = [true_negative2/total_health2
+       false_positive2/total_health2
+       false_negative2/total_seek2
+       true_positive2/total_seek2
+       ];
+
