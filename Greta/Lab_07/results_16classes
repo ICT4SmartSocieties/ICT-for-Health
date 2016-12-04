@@ -1,0 +1,37 @@
+
+*************************************
+learning rate : 0.02    iterations : 500
+probability correct decision: 0.938053097345
+2
+*************************************
+learning rate : 0.0002    iterations : 500
+probability correct decision: 0.548672566372
+2
+*************************************
+learning rate : 2e-06    iterations : 500
+probability correct decision: 0.203539823009
+2
+*************************************
+learning rate : 0.02    iterations : 1000
+probability correct decision: 0.993362831858
+2
+*************************************
+learning rate : 0.0002    iterations : 1000
+probability correct decision: 0.62610619469
+2
+*************************************
+learning rate : 2e-06    iterations : 1000
+probability correct decision: 0.0243362831858
+2
+*************************************
+learning rate : 0.02    iterations : 10000
+probability correct decision: 0.997787610619
+2
+*************************************
+learning rate : 0.0002    iterations : 10000
+probability correct decision: 0.898230088496
+2
+*************************************
+learning rate : 2e-06    iterations : 10000
+probability correct decision: 0.497787610619
+2

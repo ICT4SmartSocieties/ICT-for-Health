@@ -1,0 +1,79 @@
+
+
+*************************************
+learning rate : 0.0002    iterations : 1000
+probability_true_positive : 0.9371980676328503
+probability_false_negative : 0.06280193236714976
+probability_false_positive : 0.13877551020408163
+probability_true_negative : 0.8612244897959184
+2
+*************************************
+learning rate : 0.02    iterations : 500
+probability_true_positive : 0.9951690821256038
+probability_false_negative : 0.004830917874396135
+probability_false_positive : 0.0
+probability_true_negative : 1.0
+2
+*************************************
+learning rate : 0.0002    iterations : 500
+probability_true_positive : 0.024154589371980676
+probability_false_negative : 0.9758454106280193
+probability_false_positive : 0.0
+probability_true_negative : 1.0
+2
+*************************************
+learning rate : 2e-06    iterations : 500
+probability_true_positive : 0.0
+probability_false_negative : 1.0
+probability_false_positive : 0.0
+probability_true_negative : 1.0
+2
+*************************************
+learning rate : 0.02    iterations : 1000
+probability_true_positive : 0.9951690821256038
+probability_false_negative : 0.004830917874396135
+probability_false_positive : 0.0
+probability_true_negative : 1.0
+2
+*************************************
+learning rate : 0.0002    iterations : 1000
+probability_true_positive : 0.34299516908212563
+probability_false_negative : 0.6570048309178744
+probability_false_positive : 0.024489795918367346
+probability_true_negative : 0.9755102040816327
+2
+*************************************
+learning rate : 2e-06    iterations : 1000
+probability_true_positive : 0.0
+probability_false_negative : 1.0
+probability_false_positive : 0.0
+probability_true_negative : 1.0
+2
+*************************************
+learning rate : 0.02    iterations : 10000
+probability_true_positive : 0.9951690821256038
+probability_false_negative : 0.004830917874396135
+probability_false_positive : 0.0
+probability_true_negative : 1.0
+2
+*************************************
+learning rate : 0.0002    iterations : 10000
+probability_true_positive : 0.9951690821256038
+probability_false_negative : 0.004830917874396135
+probability_false_positive : 0.0
+probability_true_negative : 1.0
+2
+*************************************
+learning rate : 2e-06    iterations : 10000
+probability_true_positive : 0.0
+probability_false_negative : 1.0
+probability_false_positive : 0.0
+probability_true_negative : 1.0
+2
+*************************************
+learning rate : 2e-06    iterations : 100000
+probability_true_positive : 0.3333333333333333
+probability_false_negative : 0.6666666666666666
+probability_false_positive : 0.024489795918367346
+probability_true_negative : 0.9755102040816327
+2
