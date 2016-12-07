@@ -38,9 +38,8 @@ def execuction(normData,dimensions, features, name):
     x=tf.placeholder(tf.float32,[dimensions[0],dimensions[1]])#inputs
     t=tf.placeholder(tf.float32,[dimensions[0],1])#desired outputs
     
-    b=tf.Variable(tf.random_normal(shape=[dimensions[0],1], mean=0.0, stddev=1.0, dtype=tf.float32, name="biases"))
+    b=tf.Variable(tf.random_normal(shape=[1,1], mean=0.0, stddev=1.0, dtype=tf.float32, name="biases"))
     w=tf.Variable(tf.random_normal(shape=[dimensions[1],1], mean=0.0, stddev=1.0, dtype=tf.float32, name="weights"))
-    
     y=tf.matmul(x,w) + b
     
     cost=tf.reduce_sum(tf.squared_difference(y, t, name="objective_function"))#objective function

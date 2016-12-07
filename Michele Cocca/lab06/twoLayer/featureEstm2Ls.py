@@ -39,19 +39,22 @@ def execuction(normData,dimensions, features, name):
     tf.set_random_seed(1234)
     x = tf.placeholder(tf.float32,[dimensions[0],dimensions[1]])#inputs
     t = tf.placeholder(tf.float32,[dimensions[0],1])#desired outputs
+    
     #--- neural netw structure:
     w1 = tf.Variable(tf.random_normal(shape=[dimensions[1],hn1l], mean=0.0, stddev=1.0, dtype=tf.float32, name="weights1"))
-    b1 = tf.Variable(tf.random_normal(shape=[dimensions[0],hn1l], mean=0.0, stddev=1.0, dtype=tf.float32, name="biases1"))
+    b1 = tf.Variable(tf.random_normal(shape=[1,hn1l], mean=0.0, stddev=1.0, dtype=tf.float32, name="biases1"))
     a1 = tf.matmul(x,w1)+b1
     z1 = tf.nn.tanh(a1)
+    
     w2 = tf.Variable(tf.random_normal([hn1l,hn2l], mean=0.0, stddev=1.0, dtype=tf.float32, name="weights2"))
-    b2 = tf.Variable(tf.random_normal([dimensions[0],hn2l], mean=0.0, stddev=1.0, dtype=tf.float32, name="biases2"))
+    b2 = tf.Variable(tf.random_normal([1,hn2l], mean=0.0, stddev=1.0, dtype=tf.float32, name="biases2"))
     a2 = tf.matmul(z1,w2)+b2
     z2 = tf.nn.tanh(a2)
+    
     w3 = tf.Variable(tf.random_normal([hn2l,1], mean=0.0, stddev=1.0, dtype=tf.float32, name="weights3"))
-    b3 = tf.Variable(tf.random_normal([dimensions[0],1], mean=0.0, stddev=1.0, dtype=tf.float32, name="biases3"))
+    b3 = tf.Variable(tf.random_normal([1,1], mean=0.0, stddev=1.0, dtype=tf.float32, name="biases3"))
     a3 = tf.matmul(z2,w3)+b3
-    y = tf.nn.tanh(a3)
+    y = a3
     
     cost=tf.reduce_sum(tf.squared_difference(y, t, name="objective_function"))#objective function
     optim=tf.train.GradientDescentOptimizer(2e-5,name="GradientDescent")# use gradient descent in the trainig phase
