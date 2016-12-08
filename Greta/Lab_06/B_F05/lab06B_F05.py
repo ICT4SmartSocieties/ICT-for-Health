@@ -56,17 +56,16 @@ x = tf.placeholder(tf.float32,[Nsamples,used_features])#inputs
 t = tf.placeholder(tf.float32,[Nsamples,1])#desired outputs
 #--- neural netw structure:
 w1 = tf.Variable(tf.random_normal(shape=[used_features,hidden_nodes_first_layer], mean=0.0, stddev=1.0, dtype=tf.float32, name="weights1"))
-b1 = tf.Variable(tf.random_normal(shape=[Nsamples,hidden_nodes_first_layer], mean=0.0, stddev=1.0, dtype=tf.float32, name="biases1"))
+b1 = tf.Variable(tf.random_normal(shape=[1,hidden_nodes_first_layer], mean=0.0, stddev=1.0, dtype=tf.float32, name="biases1"))
 a1 = tf.matmul(x,w1)+b1
 z1 = tf.nn.tanh(a1)
 w2 = tf.Variable(tf.random_normal([hidden_nodes_first_layer,hidden_nodes_second_layer], mean=0.0, stddev=1.0, dtype=tf.float32, name="weights2"))
-b2 = tf.Variable(tf.random_normal([Nsamples,hidden_nodes_second_layer], mean=0.0, stddev=1.0, dtype=tf.float32, name="biases2"))
+b2 = tf.Variable(tf.random_normal([1,hidden_nodes_second_layer], mean=0.0, stddev=1.0, dtype=tf.float32, name="biases2"))
 a2 = tf.matmul(z1,w2)+b2
 z2 = tf.nn.tanh(a2)
 w3 = tf.Variable(tf.random_normal([hidden_nodes_second_layer,1], mean=0.0, stddev=1.0, dtype=tf.float32, name="weights3"))
-b3 = tf.Variable(tf.random_normal([Nsamples,1], mean=0.0, stddev=1.0, dtype=tf.float32, name="biases3"))
-a3 = tf.matmul(z2,w3)+b3
-y = tf.nn.tanh(a3) #output of the network 
+b3 = tf.Variable(tf.random_normal([1,1], mean=0.0, stddev=1.0, dtype=tf.float32, name="biases3"))
+y = tf.matmul(z2,w3)+b3
 #--- optimizer structure
 cost = tf.reduce_sum(tf.squared_difference(y, t, name="objective_function"))#objective function
 optim = tf.train.GradientDescentOptimizer(learning_rate,name="GradientDescent")# use gradient descent in the trainig phase
