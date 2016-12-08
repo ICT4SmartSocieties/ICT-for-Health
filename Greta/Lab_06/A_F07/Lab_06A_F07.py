@@ -45,7 +45,7 @@ x = tf.placeholder(tf.float32,[Nsamples,used_features])#inputs
 t = tf.placeholder(tf.float32,[Nsamples,1])#desired outputs
 #--- neural netw structure:
 w1 = tf.Variable(tf.random_normal(shape=[used_features,1], mean=0.0, stddev=1.0, dtype=tf.float32, name="weights_1"))
-b1 = tf.Variable(tf.random_normal(shape=[Nsamples,1], mean=0.0, stddev=1.0, dtype=tf.float32, name="biases_1"))
+b1 = tf.Variable(tf.random_normal(shape=[1,1], mean=0.0, stddev=1.0, dtype=tf.float32, name="biases_1"))
 y = tf.matmul(x,w1)+b1
 
 ##--- optimizer structure
