@@ -1,3 +1,19 @@
+
+% This LaTeX was auto-generated from MATLAB code.
+% To make changes, update the MATLAB code and republish this document.
+
+\documentclass{article}
+\usepackage{graphicx}
+\usepackage{color}
+
+\sloppy
+\definecolor{lightgray}{gray}{0.5}
+\setlength{\parindent}{0pt}
+
+\begin{document}
+
+    
+    \begin{verbatim}
 close all
 clear all
 %Lab 1 - ICT HEALTH - Perform regression - MSE
@@ -5,7 +21,7 @@ clear all
 load('data_train_norm.mat');
 load('data_test_norm.mat');
 
-F0 = 7; 
+F0 = 7;
 flag_features = 4; %first features
 
 y_train = data_train_norm(:,F0);
@@ -48,3 +64,17 @@ grid on
 figure
 hist(y_hat_test - y_test, 50)
 grid on
+\end{verbatim}
+
+\includegraphics [width=4in]{Lab1Part3_01.png}
+
+\includegraphics [width=4in]{Lab1Part3_02.png}
+
+\includegraphics [width=4in]{Lab1Part3_03.png}
+
+\includegraphics [width=4in]{Lab1Part3_04.png}
+
+
+
+\end{document}
+    

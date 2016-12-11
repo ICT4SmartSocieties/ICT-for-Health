@@ -1,6 +1,6 @@
 close all
 clear all
-%Lab 1 - ICT HEALTH - Perform regression - Gradient Algorithm
+%Lab 1 - ICT HEALTH - Perform regression - Steepest Descent
 
 load('data_train_norm.mat');
 load('data_test_norm.mat');
@@ -18,16 +18,16 @@ X_test(:,F0)=[];
 rng('default');
 
 a_hat_i = rand(17,1);
-gamma = 10^-7;
-epsilon = 10^-6;
 a_hat_ii = rand(17,1);
+epsilon = 10^-6;
 
 counter=0;
 while ( norm(a_hat_i - a_hat_ii) > epsilon )
-        
+    
     grad_a_hat_i = -2 * transpose(X_train)*y_train + 2 * transpose(X_train)*X_train*a_hat_i;
+    H = 4 * transpose(X_train) * X_train;
     a_hat_ii = a_hat_i;
-    a_hat_i = a_hat_i - (gamma * grad_a_hat_i);
+    a_hat_i = a_hat_i - norm(grad_a_hat_i)^2*grad_a_hat_i/( transpose(grad_a_hat_i)*H*grad_a_hat_i );
     counter = counter + 1;
     
 end
