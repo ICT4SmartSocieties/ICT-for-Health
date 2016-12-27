@@ -2,6 +2,7 @@ close all
 clear all
 % Lab 3 - Execution
 
+addpath('../functions/');
 load('arrhythmiaCleaned.mat');
 
 class_id = arrhythmiaCleaned(:,end);
@@ -30,31 +31,7 @@ dist2=U+V-2*dotprod;
 [dummy, previsione] = min(dist2.');
 previsione = previsione';
 
-verinegativi = 0;
-falsipositivi = 0;
-veripositivi = 0;
-falsinegativi = 0;
-arrhythmia_lastcol = arrhythmiaCleaned(:,end);
-for i = 1 : length(arrhythmiaCleaned) 
-    if (arrhythmia_lastcol(i) == 1)
-        if (arrhythmia_lastcol(i) - previsione(i) == 0)
-            verinegativi = verinegativi + 1;
-        else 
-            falsipositivi = falsipositivi + 1;
-        end
-    else
-        if (arrhythmia_lastcol(i) - previsione(i) == 0) 
-            veripositivi = veripositivi + 1;
-        else 
-            falsinegativi = falsinegativi + 1;
-        end
-    end
-end
-
-specificity = verinegativi / (verinegativi + falsipositivi); %true negative
-sensitivity = veripositivi / (veripositivi + falsinegativi); % true positive
-falsealarm = falsipositivi / (verinegativi + falsipositivi);
-misseddetection = falsinegativi / (veripositivi + falsinegativi);
+[specificity, sensitivity, falsealarm, missdetection] = check_detections(previsione, class_id);
 
 %BAYES
 
@@ -116,41 +93,4 @@ dist2B_bis(:,2)= dist2B(:,2)- 2 * log(pi2);
 [dummy, previsione2] = min(dist2B_bis.');
 previsione2 = previsione2';
 
-
-
-verinegativiB = 0;
-falsipositiviB = 0;
-veripositiviB = 0;
-falsinegativiB = 0;
-arrhythmia_lastcol = arrhythmiaCleaned(:,end);
-for i = 1 : length(arrhythmiaCleaned) 
-    if (arrhythmia_lastcol(i) == 1)
-        if (arrhythmia_lastcol(i) - previsione2(i) == 0)
-            verinegativiB = verinegativiB + 1;
-        else 
-            falsipositiviB = falsipositiviB + 1;
-        end
-    else
-        if (arrhythmia_lastcol(i) - previsione2(i) == 0) 
-            veripositiviB = veripositiviB + 1;
-        else 
-            falsinegativiB = falsinegativiB + 1;
-        end
-    end
-end
-
-specificityB = verinegativiB / (verinegativiB + falsipositiviB); %true negative
-sensitivityB = veripositiviB / (veripositiviB + falsinegativiB); % true positive
-falsealarmB = falsipositiviB / (verinegativiB + falsipositiviB);
-misseddetectionB = falsinegativiB / (veripositiviB + falsinegativiB);
-
-
-
-
-
-
-
-
-
-
-
+[specificityB, sensitivityB, falsealarmB, missdetectionB] = check_detections(previsione2, class_id);
